@@ -3,11 +3,6 @@
 	url = git@github.com:cryptoscan-pro/backend-common.git
 	branch = main
 	update = merge
-[submodule "entries/backtester"]
-	path = entries/backtester
-	url = git@gitlab.com:p2p-scanner/backtester.git
-	branch = main
-	update = merge
 [submodule "entries/connectors-maker"]
 	path = entries/connectors-maker
 	url = git@github.com:cryptoscan-pro/connectors-maker.git
