@@ -1,6 +1,6 @@
 ﻿[submodule "packages/backend-common"]
 	path = packages/backend-common
-	url = git@gitlab.com:p2p-scanner/backend-common.git
+	url = git@github.com:cryptoscan-pro/backend-common.git
 	branch = main
 	update = merge
 [submodule "entries/backtester"]
@@ -10,7 +10,7 @@
 	update = merge
 [submodule "entries/connectors-maker"]
 	path = entries/connectors-maker
-	url = git@gitlab.com:p2p-scanner/connectors-maker.git
+	url = git@github.com:cryptoscan-pro/connectors-maker.git
 	branch = main
 	update = merge
 [submodule "entries/data-saver"]
@@ -20,41 +20,57 @@
 	update = merge
 [submodule "entries/web"]
 	path = entries/web
-	url = git@gitlab.com:p2p-scanner/web.git
+	url = git@github.com:cryptoscan-pro/web.git
 	branch = main
 	update = merge
 [submodule "entries/scanner"]
 	path = entries/scanner
-	url = git@gitlab.com:p2p-scanner/scanner.git
+	url = git@github.com:cryptoscan-pro/scanner.git
 	branch = main
 	update = merge
 [submodule "entries/dex-scanner"]
 	path = entries/dex-scanner
-	url = git@gitlab.com:p2p-scanner/dex-scanner.git
+	url = git@github.com:cryptoscan-pro/dex-scanner.git
 	branch = main
 	update = merge
 [submodule "entries/proxy-manager"]
 	path = entries/proxy-manager
-	url = git@gitlab.com:p2p-scanner/proxy-manager.git
+	url = git@github.com:cryptoscan-pro/proxy-manager.git
 	branch = main
 	update = merge
 [submodule "entries/telegram-notify"]
 	path = entries/telegram-notify
-	url = git@gitlab.com:p2p-scanner/telegram-notify.git
+	url = git@github.com:cryptoscan-pro/telegram-notify.git
 	branch = main
 	update = merge
 [submodule "packages/cex-sdk"]
 	path = packages/cex-sdk
-	url = git@gitlab.com:p2p-scanner/api.git
+	url = git@github.com:cryptoscan-pro/cex-sdk.git
 	branch = main
 	update = merge
 [submodule "packages/dex-sdk"]
 	path = packages/dex-sdk
-	url = git@gitlab.com:p2p-scanner/dex-api.git
+	url = git@github.com:cryptoscan-pro/dex-sdk.git
 	branch = main
 	update = merge
 [submodule "packages/ui"]
 	path = packages/ui
-	url = git@gitlab.com:p2p-scanner/ui.git
+	url = git@github.com:cryptoscan-pro/ui.git
 	branch = main
 	update = merge
+[submodule "packages/shared-common"]
+	path = packages/shared-common
+	url = git@github.com:cryptoscan-pro/shared-common.git
+	branch = main
+[submodule "packages/mev-sdk"]
+	path = packages/mev-sdk
+	url = git@github.com:cryptoscan-pro/mev-sdk.git
+	branch = main
+[submodule "packages/frontend-common"]
+	path = packages/frontend-common
+	url = git@github.com:cryptoscan-pro/frontend-common.git
+	branch = main
+[submodule "packages/eslint"]
+	path = packages/eslint
+	url = git@github.com:cryptoscan-pro/eslint.git
+	branch = main
