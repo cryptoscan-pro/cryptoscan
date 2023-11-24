@@ -1,0 +1,310 @@
+services:
+  # syncthing:
+  #   extends:
+  #     file: docker-compose.services.yml
+  #     service: syncthing
+  #   networks:
+  #     - p2p-main
+  # main:
+  #   image: p2pmain
+  #   build:
+  #     context: ./
+  #     dockerfile: Dockerfile
+  #   container_name: p2pdev
+  #   env_file: 
+  #     - .env
+  #   depends_on:
+  #     - proxy-manager
+  #     - data-saver
+  #     - redis
+  #   volumes:
+  #     - .:/src
+  #   networks:
+  #     - p2p-main
+  # web:
+  #   build:
+  #     context: ./entries/web
+  #     dockerfile: Dockerfile
+  #   container_name: web
+  #   image: registry.gitlab.com/p2p-scanner/web:master
+  #   depends_on:
+  #     - clickhouse
+  #     - rabbitmq
+  #   restart: always
+  #   env_file: 
+  #     - .env
+  #   environment:
+  #     - NODE_ENV=production
+  #   deploy:
+  #     replicas: 0
+  #   volumes:
+  #     - ./entries/web:/app/src
+  #     - cache:/app/var/cache
+  #   ports:
+  #     - '3000:3000'
+  #   networks:
+  #     - p2p-main
+  packages:
+    image: p2pmain
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: sh -c "pnpm run packages-dev"
+    container_name: packages
+    env_file: 
+      - .env
+    volumes:
+      - ./node_modules:/src/node_modules
+      - ./packages:/src/packages
+    networks:
+      - p2p-main
+  scanner:
+    image: p2pmain
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: sh -c "cd entries/scanner && pnpm run dev"
+    container_name: scanner
+    env_file: 
+      - .env
+    depends_on:
+      - proxy-manager
+      - data-saver
+      - redis
+      - packages
+    ports:
+      - 3001:3000
+    volumes:
+      - ./entries/scanner:/src/entries/scanner
+      - ./node_modules:/src/node_modules
+      - ./packages:/src/packages
+    networks:
+      - p2p-main
+  data-saver:
+    image: p2pmain
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: data-saver
+    command: sh -c "cd entries/data-saver && pnpm run dev"
+    env_file: 
+      - .env
+    depends_on:
+      - proxy-manager
+      - redis
+      - packages
+    volumes:
+      - ./entries/data-saver:/src/entries/data-saver
+      - ./node_modules:/src/node_modules
+      - ./packages:/src/packages
+    ports:
+      - 2990:2999
+    networks:
+      - p2p-main
+  telegram-notify:
+    image: p2pmain
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: telegram-notify
+    command: sh -c "cd entries/telegram-notify && pnpm run dev"
+    env_file: 
+      - .env
+    depends_on:
+      - redis
+      - packages
+      - connectors-maker
+    volumes:
+      - ./entries/telegram-notify:/src/entries/telegram-notify
+      - ./node_modules:/src/node_modules
+      - ./packages:/src/packages
+    networks:
+      - p2p-main
+  web:
+    image: p2pmain
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: sh -c "cd entries/web && pnpm run dev"
+    container_name: web
+    env_file: 
+      - .env
+    depends_on:
+      - connectors-maker
+      - redis
+      - packages
+    volumes:
+      - ./entries/web:/src/entries/web
+      - ./node_modules:/src/node_modules
+      - ./packages:/src/packages
+    ports:
+      - '3000:3000'
+    networks:
+      - p2p-main
+  connectors-maker:
+    image: p2pmain
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: sh -c "cd entries/connectors-maker && pnpm run dev"
+    container_name: connectors-maker
+    env_file: 
+      - .env
+    # environment:
+      # - DISABLE_CRON=1
+    depends_on:
+      - redis
+      - packages
+    volumes:
+      - ./entries/connectors-maker:/src/entries/connectors-maker
+      - ./node_modules:/src/node_modules
+      - ./packages:/src/packages
+    ports:
+      - '2995:2995'
+    networks:
+      - p2p-main
+  # connectors-maker-parser:
+  #   image: p2pmain
+  #   build:
+  #     context: ./
+  #     dockerfile: Dockerfile
+  #   command: sh -c "cd entries/connectors-maker && pnpm run dev"
+  #   container_name: connectors-maker-parser
+  #   env_file: 
+  #     - .env
+  #   depends_on:
+  #     - redis
+  #     - packages
+  #   volumes:
+  #     - ./entries/connectors-maker:/src/entries/connectors-maker
+  #     - ./node_modules:/src/node_modules
+  #     - ./packages:/src/packages
+  #   networks:
+  #     - p2p-main
+  # dex-scanner:
+  #   image: registry.gitlab.com/p2p-scanner/dex-scanner:master
+  #   depends_on:
+  #     - clickhouse
+  #     - rabbitmq
+  #   restart: always
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - '3981-3989:3002'
+  #   networks:
+  #     - p2p-main
+  #   environment:
+  #     - EXCHANGES=mexc
+  #     - DISABLE_CRON=0
+  #     - NODE_ENV=development
+  #     - QUEUE_LIMIT=300
+  #   deploy:
+  #     replicas: 0
+  # scanner:
+  #   build:
+  #     context: ./entries/scanner
+  #     dockerfile: Dockerfile
+  #   image: registry.gitlab.com/p2p-scanner/scanner:master
+  #   depends_on:
+  #     - clickhouse
+  #     - rabbitmq
+  #   restart: always
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - '3991-3995:3000'
+  #   networks:
+  #     - p2p-main
+  #   environment:
+  #     - NODE_ENV=development
+  #     - QUEUE_LIMIT=300
+  #     - CI_PROJECT_ID=49083682
+  #     - CI_JOB_TOKEN=glpat-4BLn3gaVoLXBpss73P1f
+  #   deploy:
+  #     replicas: 0
+  # data-saver:
+  #   build:
+  #     context: ./entries/data-saver
+  #     dockerfile: Dockerfile
+  #   container_name: data-saver
+  #   image: registry.gitlab.com/p2p-scanner/data-saver:master
+  #   depends_on:
+  #     - proxy-manager
+  #     - clickhouse
+  #     - rabbitmq
+  #     - scanner
+  #   restart: always
+  #   env_file: 
+  #     - .env
+  #   environment:
+  #     - NODE_ENV=production
+  #   deploy:
+  #     replicas: 0
+  #   volumes:
+  #     - ./src:/app/src
+  #     - cache:/app/var/cache
+  #   networks:
+  #     - p2p-main
+  # telegram-notify:
+    # build:
+    #   context: ./entries/telegram-notify
+    #   dockerfile: Dockerfile
+    # image: registry.gitlab.com/p2p-scanner/telegram-notify:master
+    # container_name: telegram-notify
+    # restart: always
+    # env_file: 
+    #   - .env
+    # environment:
+    #   - NODE_ENV=production
+    #   - SCANNER_API=http://main:3000
+    # deploy:
+    #   replicas: 1
+    # volumes:
+    #   - ./entries/telegram-notify/src:/src/src
+    # networks:
+    #   - p2p-main
+  redis:
+    extends:
+      file: docker-compose.services.yml
+      service: redis
+    networks:
+      - p2p-main
+  rabbitmq:
+    extends:
+      file: docker-compose.services.yml
+      service: rabbitmq
+    networks:
+      - p2p-main
+    ports:
+      - '5671:5672'
+      - '15671-15672:15672'
+      - '15691-15692:15692'
+  clickhouse:
+    extends:
+      file: docker-compose.services.yml
+      service: clickhouse
+    networks:
+      - p2p-main
+  proxy-manager:
+    image: p2pmain
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: sh -c "cd entries/proxy-manager && pnpm run dev"
+    container_name: proxy-manager
+    env_file: 
+      - .env
+    ports:
+      - '3100:3001'
+    volumes:
+      - proxymanager:/src/entries/proxy-manager/var
+      - ./entries/proxy-manager/src:/src/entries/proxy-manager/src
+    networks:
+      - p2p-main
+volumes:
+  syncthing:
+  p2p-clickhouse:
+  cache:
+  proxymanager:
+networks:
+  p2p-main:

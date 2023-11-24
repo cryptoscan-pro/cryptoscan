@@ -1,0 +1,83 @@
+services:
+  redis:
+    container_name: p2p-redis
+    image: redis:alpine
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVXlEwVmmxKPCDrwMtyKVgeooLd2t81
+    ports:
+      - '6379:6379'
+    networks:
+      - p2p-main
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      - AMQP_HOST=host.docker.internal
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit heartbeat_timeout 3600
+    volumes:
+      - ./var/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
+    networks:
+      - p2p-main
+  clickhouse:
+    container_name: p2p-clickhouse
+    image: yandex/clickhouse-server
+    ports:
+      - 8124:8123
+      - 9021:9000
+    networks:
+      - p2p-main
+    env_file:
+      - .env
+    environment:
+      - CLICKHOUSE_USER=default
+      - CLICKHOUSE_PASSWORD=3fijreowfiejr
+    volumes:
+      - p2p-clickhouse:/var/lib/clickhouse
+  clickhouse_exporter:
+    container_name: clickhouse-exporter
+    image: f1yegor/clickhouse-exporter
+    command: -scrape_uri=http://clickhouse:8123/
+    env_file:
+      - .env
+    ports:
+      - 9116:9116
+    networks:
+      - p2p-main
+  proxy-manager:
+    image: javeoff/proxy-manager
+    container_name: proxymanager
+    restart: always
+    volumes:
+      - proxymanager:/app/var
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./var/prometheus:/etc/prometheus/
+    networks:
+      - p2p-main
+  grafana:
+    container_name: grafana
+    image: grafana/grafana-oss
+    ports:
+      - '31791:3000'
+  elasticsearch:
+    container_name: p2p-elasticsearch
+    image: elasticsearch:8.10.2
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+      - 9300:9300
+  elasticsearch_exporter:
+    image: quay.io/prometheuscommunity/elasticsearch-exporter:latest
+    command:
+     - '--es.uri=http://elasticsearch:9200'
+    restart: always
+    ports:
+    - "127.0.0.1:9114:9114"
+volumes:
+  p2p-clickhouse:
+  proxymanager:
+networks:
+  p2p-main:

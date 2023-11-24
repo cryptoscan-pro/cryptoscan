@@ -1,0 +1,27 @@
+{
+  "pipeline": {
+    "packages-dev": {
+      "cache": true
+    },
+    "serve": {
+      "cache": true
+    },
+    "serve1": {
+      "cache": true
+    },
+    "server-dev": {
+      "cache": true,
+      "dependsOn": [
+        "@p2p-scanner/binance-scanner#dev",
+        "@p2p-scanner/bybit-scanner#dev",
+        "@p2p-scanner/gateio-scanner#dev",
+        "@p2p-scanner/mexc-scanner#dev",
+        "@p2p-scanner/data-saver#dev",
+        "@p2p-scanner/connectors-maker#dev"
+      ]
+    },
+    "connectors": {
+      "cache": true
+    }
+  }
+}

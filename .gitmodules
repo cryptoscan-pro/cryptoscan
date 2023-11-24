@@ -1,0 +1,60 @@
+﻿[submodule "packages/backend-common"]
+	path = packages/backend-common
+	url = git@gitlab.com:p2p-scanner/backend-common.git
+	branch = main
+	update = merge
+[submodule "entries/backtester"]
+	path = entries/backtester
+	url = git@gitlab.com:p2p-scanner/backtester.git
+	branch = main
+	update = merge
+[submodule "entries/connectors-maker"]
+	path = entries/connectors-maker
+	url = git@gitlab.com:p2p-scanner/connectors-maker.git
+	branch = main
+	update = merge
+[submodule "entries/data-saver"]
+	path = entries/data-saver
+	url = git@gitlab.com:p2p-scanner/data-saver.git
+	branch = main
+	update = merge
+[submodule "entries/web"]
+	path = entries/web
+	url = git@gitlab.com:p2p-scanner/web.git
+	branch = main
+	update = merge
+[submodule "entries/scanner"]
+	path = entries/scanner
+	url = git@gitlab.com:p2p-scanner/scanner.git
+	branch = main
+	update = merge
+[submodule "entries/dex-scanner"]
+	path = entries/dex-scanner
+	url = git@gitlab.com:p2p-scanner/dex-scanner.git
+	branch = main
+	update = merge
+[submodule "entries/proxy-manager"]
+	path = entries/proxy-manager
+	url = git@gitlab.com:p2p-scanner/proxy-manager.git
+	branch = main
+	update = merge
+[submodule "entries/telegram-notify"]
+	path = entries/telegram-notify
+	url = git@gitlab.com:p2p-scanner/telegram-notify.git
+	branch = main
+	update = merge
+[submodule "packages/cex-sdk"]
+	path = packages/cex-sdk
+	url = git@gitlab.com:p2p-scanner/api.git
+	branch = main
+	update = merge
+[submodule "packages/dex-sdk"]
+	path = packages/dex-sdk
+	url = git@gitlab.com:p2p-scanner/dex-api.git
+	branch = main
+	update = merge
+[submodule "packages/ui"]
+	path = packages/ui
+	url = git@gitlab.com:p2p-scanner/ui.git
+	branch = main
+	update = merge

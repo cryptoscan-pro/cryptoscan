@@ -1,0 +1,20 @@
+{
+  "name": "p2p-scanner",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "turbo serve",
+    "packages-dev": "turbo packages-dev",
+    "server-dev": "turbo server-dev",
+    "connectors": "turbo connectors"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.9.5",
+    "react-redux": "^8.1.3",
+    "turbo": "^1.10.16"
+  }
+}

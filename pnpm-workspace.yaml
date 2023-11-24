@@ -1,0 +1,3 @@
+packages:
+  - 'entries/**'
+  - 'packages/**'
